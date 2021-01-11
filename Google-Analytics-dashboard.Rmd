@@ -1,0 +1,139 @@
+---
+title: "Custom Google Analytics dashboard"
+subtitle: "statsandr.com"
+author: "Antoine Soetewey"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+    source_code: embed
+    social: ["twitter", "facebook", "linkedin"]
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(reactable)
+
+library(googleAnalyticsR)
+
+# specify an email you have already authenticated with once outside of Rmd
+ga_auth(email = "ant.soetewey@gmail.com")
+
+accounts <- ga_account_list()
+# accounts
+accounts$webPropertyName
+
+# select the view ID by property name
+view_id <- accounts$viewId[which(accounts$webPropertyName == "statsandr.com")]
+
+# set date range
+start_date <- as.Date("2019-12-16")
+end_date <- as.Date("2020-12-15") # Sys.Date() - 1
+
+# get Google Analytics (GA) data
+gadata0 <- google_analytics(view_id,
+  date_range = c(start_date, end_date),
+  metrics = c("users", "pageviews"),
+  anti_sample = TRUE # slows down the request but ensures data isn't sampled
+)
+
+gadata1 <- google_analytics(view_id,
+  date_range = c(start_date, end_date),
+  metrics = c("pageviews"),
+  dimensions = c("date"),
+  anti_sample = TRUE # slows down the request but ensures data isn't sampled
+)
+
+gadata2 <- google_analytics(view_id,
+  date_range = c(start_date, end_date),
+  metrics = c("pageviews"),
+  dimensions = c("pageTitle"),
+  anti_sample = TRUE # slows down the request but ensures data isn't sampled
+)
+gadata2 <- subset(gadata2, pageviews > 500)
+
+theme_set(theme_minimal())
+
+users_color <- "purple"
+pageviews_color <- "forestgreen"
+```
+
+Row
+-----------------------------------------------------------------------
+
+### users {.value-box}
+
+```{r}
+valueBox(
+  value = paste(format(sum(gadata0$users), big.mark = ","), "", sep = " "),
+  caption = "Users",
+  icon = "far fa-user",
+  color = users_color
+)
+```
+
+### pageviews {.value-box}
+
+```{r}
+valueBox(
+  value = paste(format(sum(gadata0$pageviews), big.mark = ","), "", sep = " "),
+  caption = "Page views",
+  icon = "far fa-file-alt",
+  color = pageviews_color
+)
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Page views
+
+```{r}
+gadata_by_day <- gadata1 %>% 
+  group_by(date) %>% 
+  summarize(pagesums = sum(pageviews))
+
+# scatter plot with a trend line
+gadata1 %>%
+  ggplot(aes(x = date, y = pageviews)) +
+  geom_point(size = 1L, color = "steelblue") + # change size and color of points
+  geom_smooth(color = "darkgrey", alpha = 0.25) + # change color of smoothed line and transparency of confidence interval
+  theme_minimal() +
+  labs(
+    y = "Page views",
+    x = "",
+    # title = NA,
+    # subtitle = NA,
+    caption = "Data: Google Analytics data of statsandr.com"
+  ) +
+  theme(plot.margin = unit(c(5.5, 15.5, 5.5, 5.5), "pt")) + # to avoid the plot being cut on the right edge
+  scale_y_continuous(labels = scales::comma) # better y labels
+```
+
+### Most popular posts
+
+```{r}
+gadata_most_popular <- gadata2 %>% 
+  count(pageTitle, wt = pageviews, sort=TRUE)
+
+reactable(gadata_most_popular,
+           columns = list(pageTitle     = colDef(name = "Title",
+                                            align = "left"),
+                          n             = colDef(name = "Page views")),
+            pagination = TRUE,
+            searchable = TRUE,
+            striped = TRUE)
+```
+
+### About
+
+This dashboard ...
+
+```{r}
+paste0(format(start_date, "%b %d, %Y"), " to ", format(end_date, "%b %d, %Y"))
+```
+
+
