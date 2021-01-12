@@ -1,5 +1,5 @@
 ---
-title: "Custom Google Analytics dashboard"
+title: "Google Analytics dashboard"
 author: "statsandr.com"
 output: 
   flexdashboard::flex_dashboard:
