@@ -15,7 +15,8 @@ library(readr)
 library(ggplot2)
 library(dplyr)
 library(reactable)
-
+library(lubridate)
+library(stringr)
 library(googleAnalyticsR)
 
 # specify an email you have already authenticated with once outside of Rmd
@@ -100,7 +101,6 @@ gadata1 %>%
   ggplot(aes(x = date, y = pageviews)) +
   geom_point(size = 1L, color = "steelblue") + # change size and color of points
   geom_smooth(color = "darkgrey", alpha = 0.25) + # change color of smoothed line and transparency of confidence interval
-  theme_minimal() +
   labs(
     y = "Page views",
     x = ""
@@ -115,16 +115,34 @@ gadata1 %>%
 ### Most popular posts
 
 ```{r}
-gadata_most_popular <- gadata2 %>% 
-  count(pageTitle, wt = pageviews, sort=TRUE)
+# gadata_most_popular <- gadata2 %>% 
+#   count(pageTitle, wt = pageviews, sort=TRUE)
 
-reactable(gadata_most_popular,
-           columns = list(pageTitle     = colDef(name = "Title",
-                                            align = "left"),
-                          n             = colDef(name = "Page views")),
-            pagination = TRUE,
-            searchable = TRUE,
-            striped = TRUE)
+# reactable(gadata_most_popular,
+#            columns = list(pageTitle     = colDef(name = "Title",
+#                                             align = "left"),
+#                           n             = colDef(name = "Page views")),
+#             pagination = TRUE,
+#             searchable = TRUE,
+#             striped = TRUE)
+
+most_viewed_posts <- gadata2 %>%
+  mutate(Title = str_trunc(pageTitle, width = 40)) %>% # keep maximum 40 characters
+  count(Title, wt = pageviews, sort = TRUE)
+
+# plot
+top_n(most_viewed_posts, n = 15, n) %>% # edit n for more or less pages to display
+  ggplot(., aes(x = reorder(Title, n), y = n)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(
+    y = "Page views",
+    x = ""
+    # title = "Top performing pages in terms of page views",
+    # subtitle = paste0(format(start_date, "%b %d, %Y"), " to ", format(end_date, "%b %d, %Y")),
+    # caption = "Data: Google Analytics data of statsandr.com"
+  ) +
+  scale_y_continuous(labels = scales::comma) # better y labels
 ```
 
 ### About
