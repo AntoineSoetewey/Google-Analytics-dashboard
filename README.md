@@ -17,4 +17,4 @@ More information on how to track the performance of your blog or website can be 
 For any question or feedback, you can either open an [issue](https://github.com/AntoineSoetewey/Google-Analytics-dashboard/issues) or [contact me](https://statsandr.com/contact/).
 
 
-*Go back to [statsandr.com](https://statsandr.com/) (blog) or [antoinesoetewey.com](https://www.antoinesoetewey.com/) (personal website).*
+*Go back to [statsandr.com](https://statsandr.com/) (blog) or [antoinesoetewey.com](https://antoinesoetewey.com/) (personal website).*
