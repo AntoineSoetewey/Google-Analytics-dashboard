@@ -19,6 +19,8 @@ library(lubridate)
 library(stringr)
 library(googleAnalyticsR)
 
+googleAuthR::gar_set_client('/Users/antoinesoetewey/Google Drive/statsandr.com/client_secret_1041935229803-bif7gdbj7edts4c5e9r5oedtcpqdcr5k.apps.googleusercontent.com.json')
+
 # specify an email you have already authenticated with once outside of Rmd
 ga_auth(email = "ant.soetewey@gmail.com")
 
@@ -100,7 +102,7 @@ gadata_by_day <- gadata1 %>%
 gadata1 %>%
   ggplot(aes(x = date, y = pageviews)) +
   geom_point(size = 1L, color = "steelblue") + # change size and color of points
-  geom_smooth(color = "darkgrey", alpha = 0.25) + # change color of smoothed line and transparency of confidence interval
+  geom_smooth(color = "steelblue", alpha = 0.25) + # change color of smoothed line and transparency of confidence interval
   labs(
     y = "Page views",
     x = ""
@@ -161,7 +163,10 @@ The input data for this dashboard is the Google Analytics data of [statsandr.com
 
 **Information & contact**
 
-More information on how to track the performance of your blog or website can be found in this [article](https://statsandr.com/blog/track-blog-performance-in-r/).
+More information on how to track the performance of your blog or website can be found in these articles:
+
+- [How to track the performance of your blog in R?](https://statsandr.com/blog/track-blog-performance-in-r/)
+- [Stats and R is 2 years old!](https://statsandr.com/blog/statsandr-is-2-years-old/)
 
 For any question or feedback, you can either open an [issue](https://github.com/AntoineSoetewey/Google-Analytics-dashboard/issues){target="_blank"} or [contact me](https://statsandr.com/contact/).
 

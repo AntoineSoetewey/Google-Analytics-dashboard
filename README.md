@@ -12,7 +12,10 @@ The input data for this dashboard is the Google Analytics data of [statsandr.com
 
 **Information & contact**
 
-More information on how to track the performance of your blog or website can be found in this [article](https://statsandr.com/blog/track-blog-performance-in-r/).
+More information on how to track the performance of your blog or website can be found in these articles:
+
+- [How to track the performance of your blog in R?](https://statsandr.com/blog/track-blog-performance-in-r/)
+- [Stats and R is 2 years old!](https://statsandr.com/blog/statsandr-is-2-years-old/)
 
 For any question or feedback, you can either open an [issue](https://github.com/AntoineSoetewey/Google-Analytics-dashboard/issues) or [contact me](https://statsandr.com/contact/).
 
