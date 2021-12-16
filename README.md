@@ -1,6 +1,6 @@
 # Custom Google Analytics dashboard
 
-This [custom Google Analytics dashboard](https://statsandr.com/blog/files/google-analytics-dashboard/) provides an overview of the evolution of page views and the most popular posts for the blog [statsandr.com](https://statsandr.com/). This dashboard is built with R using the R Markdown framework.
+This [custom Google Analytics dashboard](https://antoinesoetewey.com/files/google-analytics-dashboard) provides an overview of the evolution of page views and the most popular posts for the blog [statsandr.com](https://statsandr.com/). This dashboard is built with R using the R Markdown framework.
 
 **Code**
 
